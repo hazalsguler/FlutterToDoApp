@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todo_app/constant/color.dart';
@@ -52,16 +53,71 @@ class AddNewTasksScreen extends StatelessWidget {
                 ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text("Category"),
+                const Text("Category"),
                 GestureDetector(
                   onTap: () {
-                    
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(milliseconds: 300),
+                        content: Text("Category Selected"),
+                      ),
+                    );
                   },
                   child: Image.asset("lib/assets/images/Category.png"),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(milliseconds: 300),
+                        content: Text("Category Selected"),
+                      ),
+                    );
+                  },
+                  child: Image.asset("lib/assets/images/Category1.png"),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(milliseconds: 300),
+                        content: Text("Category Selected"),
+                      ),
+                    );
+                  },
+                  child: Image.asset("lib/assets/images/Category2.png"),
                 )
               ],
             ),
+            const Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text("Date"),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: TextField(decoration: InputDecoration(filled: true, fillColor: Colors.white),
+                          ))
+                    ],
+                  ),
+                ),
+                  Expanded(
+                  child: Column(
+                    children: [
+                      Text("Time"),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: TextField(decoration: InputDecoration(filled: true, fillColor: Colors.white),
+                          )
+                      )
+                    ],
+                  ),
+                )
+              ],
+            )
           ],
         ),
       ),
