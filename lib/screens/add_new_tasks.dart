@@ -61,7 +61,7 @@ class AddNewTasksScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         duration: Duration(milliseconds: 300),
-                        content: Text("Category Selected 2"),
+                        content: Text("Category Selected 2:"),
                       ),
                     );
                   },
