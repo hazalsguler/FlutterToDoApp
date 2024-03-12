@@ -1,31 +1,56 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:todo_app/model/tasktype.dart';
+
+import 'model/task.dart';
 
 class TodoItem extends StatefulWidget {
-  const TodoItem({super.key, required this.title});
-  final String title;
-
+  const TodoItem({super.key, required this.task});
+  final Task task;
   @override
   State<TodoItem> createState() => _TodoItemState();
+
 }
 
 class _TodoItemState extends State<TodoItem> {
-  @override
+
   bool isChecked = false;
+  @override
   Widget build(BuildContext context) {
     return Card(
+      color: widget.task.isCompleted ? Colors.grey : Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Icon(Icons.notes_outlined, size: 50,),
-          Text(widget.title,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 21,
+          widget.task.type == TaskType.note ?
+              Image.asset("lib/assets/images/Category.png") :
+              widget.task.type == TaskType.contest ?
+                  Image.asset("lib/assets/images/Category1.png") :
+                  Image.asset("lib/assets/images/Category2.png"),
+
+          Expanded(
+            child: Column(
+              children: [
+                Text(widget.task.title,
+                  style: TextStyle(
+                    decoration: widget.task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21,
+                  ),
+                ),
+                Text(widget.task.description,
+                style: TextStyle(
+                  decoration: widget.task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+                ),
+                )
+              ],
             ),
           ),
+
           Checkbox(value: isChecked, onChanged: (val) =>{
             setState(() {
+              widget.task.isCompleted = !widget.task.isCompleted;
               isChecked = val!;
             })
           }),

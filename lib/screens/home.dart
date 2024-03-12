@@ -1,8 +1,12 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:todo_app/model/tasktype.dart';
 import 'package:todo_app/screens/add_new_tasks.dart';
 
 import '../constant/color.dart';
+import '../model/task.dart';
 import '../todoitem.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +17,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> todo = ["Study Lessons", "Run 5K", "Go to Party"];
+ //List<String> todo = ["Study Lessons", "Run 5K", "Go to Party"];
+  //List<String> completed = ["Game meetup", "Take out trash"];
+  List<Task> todo = [
+    Task(type: TaskType.note, title: "Study Lessons", description: "Study COMP 117", isCompleted: false),
+    Task(type: TaskType.calendar, title: "Go to party", description: "Atend to party", isCompleted: false),
+    Task(type: TaskType.contest, title: "Run 5k", description: "Run 5 kilometres", isCompleted: false),
+  ];
+
+  void addNewTask(Task newTask) {
+    setState(() {
+      todo.add(newTask);
+    });
+  }
   List<String> completed = ["Game meetup", "Take out trash"];
 
   @override
@@ -65,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       itemCount: todo.length,
                       itemBuilder: (context, index) {
-                        return  TodoItem(title: todo[index],);
+                        return  TodoItem(task: todo[index],);
                       } ,
                     ),
                   ),
@@ -91,29 +107,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       itemCount: completed.length,
                       itemBuilder: (context, index) {
-                        return TodoItem(title: completed[index]);
+                        return TodoItem(task: completed[index]);
                       },),
                   ),
                 ),
               ),
               ElevatedButton(
-                //Kendim ekledim(butonu mavi yapmak için)
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                        (Set<MaterialState> states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        // Buton basıldığında rengi kırmızı yap
-                        return Colors.red;
-                      }
-                      // Normal durumda rengi mavi yap
-                      return Colors.blue;
-                    },
-                  ),
-                ),
-
                 onPressed: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const AddNewTasksScreen() ,)
+                    MaterialPageRoute(builder: (context) =>  AddNewTasksScreen(
+                      addNewTask: (newTask) => addNewTask,
+                    ) ,)
                   );
                 } ,
                 child: Text("Add New Task"),
