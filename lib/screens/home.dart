@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     TodoService todoService = TodoService();
-    todoService.getTodos();
+    todoService.getUncompletedTodos();
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
 
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
                     child: FutureBuilder(
-                      future: todoService.getTodos(),
+                      future: todoService.getUncompletedTodos(),
                       builder: (context, snapshot) {
                         if(snapshot.data == null) {
                           return const CircularProgressIndicator();
@@ -110,21 +110,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               //Bottom Column
-              /*Expanded(
+              Expanded(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                    child: ListView.builder(
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: completed.length,
-                      itemBuilder: (context, index) {
-                        return TodoItem(task: todo[index]);
-                      },),
+                    child:  FutureBuilder(
+                      future: todoService.getCompletedTodos(),
+                      builder: (context, snapshot) {
+                        if(snapshot.data == null) {
+                          return const CircularProgressIndicator();
+                        }
+                        else {
+                          return ListView.builder(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return  TodoItem(task: snapshot.data![index],
+                              );
+                            } ,
+                          );
+                        }
+
+                      },
+                    )
                   ),
                 ),
               ),
-               */
+
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(
