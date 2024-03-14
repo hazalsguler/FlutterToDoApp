@@ -1,10 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:todo_app/model/tasktype.dart';
 import 'package:todo_app/screens/add_new_tasks.dart';
-
+import 'package:todo_app/service/todo_service.dart';
 import '../constant/color.dart';
 import '../model/task.dart';
 import '../todoitem.dart';
@@ -22,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Task> todo = [
     Task(type: TaskType.note, title: "Study Lessons", description: "Study COMP 117", isCompleted: false),
     Task(type: TaskType.calendar, title: "Go to party", description: "Atend to party", isCompleted: false),
-    Task(type: TaskType.contest, title: "Run 5k", description: "Run 5 kilometres", isCompleted: false),
+    Task(type: TaskType.contest, title: "Run 5k", description: "Run 5 kilometres", isCompleted: false)
   ];
 
   void addNewTask(Task newTask) {
@@ -34,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    TodoService todoService = TodoService();
+    todoService.getTodos();
     double deviceHeight = MediaQuery.of(context).size.height;
     double deviceWidth = MediaQuery.of(context).size.width;
 
@@ -76,14 +76,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
-                    child: ListView.builder(
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: todo.length,
-                      itemBuilder: (context, index) {
-                        return  TodoItem(task: todo[index],);
-                      } ,
-                    ),
+                    child: FutureBuilder(
+                      future: todoService.getTodos(),
+                      builder: (context, snapshot) {
+                        if(snapshot.data == null) {
+                          return const CircularProgressIndicator();
+                        }
+                        else {
+                          return ListView.builder(
+                            primary: false,
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return  TodoItem(task: snapshot.data![index],
+                              );
+                            } ,
+                          );
+                        }
+
+                    },
+                    )
                   ),
                 ),
               ),
@@ -98,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               //Bottom Column
-              Expanded(
+              /*Expanded(
                 child: Padding(
                   padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: SingleChildScrollView(
@@ -107,11 +119,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       shrinkWrap: true,
                       itemCount: completed.length,
                       itemBuilder: (context, index) {
-                        return TodoItem(task: completed[index]);
+                        return TodoItem(task: todo[index]);
                       },),
                   ),
                 ),
               ),
+               */
               ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).push(

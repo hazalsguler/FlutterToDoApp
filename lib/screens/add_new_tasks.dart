@@ -184,7 +184,8 @@ TaskType taskType = TaskType.note;
                 widget.addNewTask(newTask);
                 Navigator.pop(context);
               } ,
-                  child: Text("Save"))
+                  child: Text("Save"),
+              )
             ],
           ),
         ),
